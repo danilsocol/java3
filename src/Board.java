@@ -28,21 +28,27 @@ public class Board {
             }
     }
 
+
+    static int y = 0;
+    static int x = 0;
     public static void depthFirstSearch(){
         Stack<int[]> stack = new Stack<>();
         Stack<int[]> crossroad = new Stack<>();
         stack.push(start);
         char obj = board[start[0]][start[1]];
 
-        while(obj != 'f'){
+        while(true){
             int[] YX = stack.pop();
 
             int countTransitions = 0;
-            int y = YX[0];
-            int x = YX[1];
+            y = YX[0];
+            x = YX[1];
             obj = board[y][x];
 
-            if(obj != 's')
+
+            if (obj == 'f')
+                break;
+            else if(obj != 's')
                 board[y][x] = '*';
 
             if(x!= 4 && (board[y][x+1] == '.'|| board[y][x+1] == 'f')){
@@ -64,19 +70,27 @@ public class Board {
 
             if(countTransitions>1)
                 crossroad.push(new int[]{y,x});
-
-            if(countTransitions==0)
-                reverse(crossroad.pop(),YX);
+            else if(countTransitions==0)
+                reverse(crossroad.pop());
         }
     }
 
-    static void reverse(int[] crossroad,int[] position){
-        while(position[0]!= crossroad[0] && position[1] != crossroad[1]){
-           
+    static void reverse(int[] crossroad){
+        while(!(y== crossroad[0] && x == crossroad[1])){
+            board[y][x] = '.';
+
+            if(x!= 4 && board[y][x+1] == '*'){
+                x += 1;
+            }
+            else if(x != 0 &&  board[y][x-1] == '*'){
+                x -= 1;
+            }
+            else if(y!=4 && board[y+1][x] == '*'){
+                y += 1;
+            }
+            else if(y!= 0 && board[y-1][x] == '*'){
+                y -= 1;
+            }
         }
-    }
-
-    static void searchForTransition(){
-
     }
 }
